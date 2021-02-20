@@ -1,72 +1,103 @@
 <template>
   <div class="container mx-auto px-4 my-12">
-    <ResponsiveTable class="w-full" v-bind="{ records, columns, sort }" @setSort="sort = $event">
-      <template #a="{ record }">
-        <div class="flex flex-col">
-          <span class="text-xs md:hidden text-blue-500">{{ record.b }}</span>
-          <span class="text-red-500">{{ record.a }}</span>
-          <span class="text-xs sm:hidden">
-            <span class="text-green-500">{{ record.c }}</span>
-            <span class="text-pink-500">{{ record.d }}</span>
-          </span>
+    <DataTable class="w-full" v-bind="{ columns, records }">
+      <template #avatar="{ record }">
+        <img
+          :src="record.avatar"
+          alt="A random puppy from Unsplash"
+          class="inline-block rounded-full shadow border-2 border-white"
+        />
+      </template>
+      <template #name="{ record }">
+        <div class="flex items-center">
+          <img
+            :src="record.avatar"
+            alt="A random puppy from Unsplash"
+            class="inline-block md:hidden rounded-full shadow border-2 border-white mr-2"
+          />
+          <div>
+            {{ record.name }}
+            <span class="block md:hidden text-gray-600 text-sm">
+              {{ record.email }}
+              <span class="sm:hidden">&bull; Last login {{ record.last_login }}</span>
+            </span>
+          </div>
         </div>
       </template>
-
-      <template #b="{ record }">{{ record.b }}</template>
-
-      <template #c="{ record }">
-        <div class="flex flex-col">
-          <span class="text-xs md:hidden text-pink-500">{{ record.d }}</span>
-          <span class="text-green-500">{{ record.c }}</span>
-        </div>
-      </template>
-
-      <template #d="{ record }">{{ record.d }}</template>
-    </ResponsiveTable>
+      <template #email="{ record }">{{ record.email }}</template>
+      <template #last_login="{ record }">{{ record.last_login }}</template>
+    </DataTable>
   </div>
 </template>
 
 <script>
-import ResponsiveTable from "./components/ResponsiveTable.vue";
+import DataTable from "./components/DataTable.vue";
 
 export default {
   name: "App",
-  components: {
-    ResponsiveTable,
-  },
+  components: { DataTable },
 
   data() {
     return {
-      sort: "a",
       records: [
-        { id: 1, a: "1a", b: "1b", c: "1c", d: "1d" },
-        { id: 2, a: "2a", b: "2b", c: "2c", d: "2d" },
-        { id: 3, a: "3a", b: "3b", c: "3c", d: "3d" },
-        { id: 4, a: "4a", b: "4b", c: "4c", d: "4d" },
+        {
+          id: 1,
+          avatar:
+            "https://images.unsplash.com/photo-1612159841306-e95c7f6dae44?crop=entropy&fit=crop&fm=jpg&h=50&q=80&w=50",
+          name: "Rachel Jones",
+          email: "rjones@example.com",
+          last_login: "2 minutes ago",
+        },
+        {
+          id: 2,
+          avatar:
+            "https://images.unsplash.com/photo-1611688298941-f2a508ee1c9b?crop=entropy&fit=crop&fm=jpg&h=50&q=80&w=50",
+          name: "Faye Knight",
+          email: "faye.knight@example.org",
+          last_login: "4 days ago",
+        },
+        {
+          id: 3,
+          avatar:
+            "https://images.unsplash.com/photo-1612195665612-30c359370759?crop=entropy&fit=crop&fm=jpg&h=50&q=80&w=50",
+          name: "Joanne Murphy",
+          email: "jmurph11@example.net",
+          last_login: "yesterday",
+        },
       ],
       columns: [
         {
-          name: "a",
-          label: "One",
-          headingClass: "text-red-500",
-          sort: "a",
-          visibility: ["md", "-lg", "xl"],
+          name: "avatar",
+          label: "",
+          classNames: {
+            cell: "text-center",
+          },
+          visible: ["md"],
         },
         {
-          name: "b",
-          label: "Two",
-          headingClass: "text-blue-500",
-          sort: "b",
+          name: "name",
+          label: "Name",
+          classNames: {
+            header: "text-left",
+          },
+          sort: "name",
         },
         {
-          name: "c",
-          label: "Three",
-          headingClass: "text-green-500",
+          name: "email",
+          label: "Email",
+          classNames: {
+            header: "text-left",
+          },
+          visible: ["md"],
         },
         {
-          name: "d",
-          label: "Four",
-          headingClass: "text-pink-500",
+          name: "last_login",
+          label: "Last Login",
+          classNames: {
+            cell: "text-center",
+          },
+          sort: "last_login_date",
+          visible: ["sm"],
         },
       ],
     };
